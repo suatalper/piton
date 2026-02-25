@@ -12,4 +12,3 @@ metin ="""{} Rekterlüğüne\n{} bölümü {} ana bilim dalı öğrencinizim.\n
 yazi = metin.format(rektorluk,bolum,anablmdalı,ders,kredi)
 
 print(yazi)
-
