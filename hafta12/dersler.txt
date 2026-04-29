@@ -1,0 +1,3 @@
+Dersin Adı :Mat
+Dersin kredisi: 12Dersin Adı :tükr
+Dersin kredisi: 45
