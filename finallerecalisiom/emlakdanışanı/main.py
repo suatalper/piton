@@ -1,36 +1,43 @@
+def devam_etmek_istiyor_mu(sorumetni):
+    cevap = input(f"{sorumetni} (Evet / E)").upper()
+    if cevap in ["EVET", "E"]:
+        return True
+    else:
+        return False
+
+
+mülk = {}
 while True:
     secim = input(
-        "Mülk Verisi Girmek İçin (1)\n Mülk Araması Yapmak İçin\n Kampanyaya Dahil Mülkleri Görüntelmek için (3)"
+        " Mülk Verisi Girmek İçin (1)\n Mülk Araması Yapmak İçin\n Kampanyaya Dahil Mülkleri Görüntelmek için (3)\n Çıkış için (4)"
     )
-    if secim == 1:
+    if secim == "1":
         while True:
             ilanno = input("İlan numarasını giriniz : ")
             sehir = input("Şehir ismini giriniz : ")
+            fiyat = int(input("Fiyatı giriniz : "))
             ilantür = input("Satılıksa(1), Kiralıksa(2) ' ye basınız : ")
-            if ilantür == 1 or 2:
-                if ilantür == 1:
-                    ""
+            if ilantür in ["1", "2"]:
+                if ilantür == "1":
+                    mülk[ilanno] = [sehir, fiyat, ilantür]
                 else:
-                    ""
+                    mülk[ilanno] = [sehir, fiyat, ilantür]
+                cevap = devam_etmek_istiyor_mu("Veri eklemek istiyormusunuz ? ")
+                if not cevap:
+                    break
+                else:
+                    continue
             else:
                 print("Hatalı giriş yaptınız !")
+                continue
 
-    elif secim == 2:
-        ""
-    elif secim == 3:
-        ""
+    elif secim == "2":
+        pass
+    elif secim == "3":
+        pass
+    elif secim == "4":
+        print("Çıkılıyor...")
+        break
     else:
         print("Hatalı giriş yaptınız !")
         continue
-
-while True:
-    ilanno = input("İlan numarasını giriniz : ")
-    sehir = input("Şehir ismini giriniz : ")
-    ilantür = input("Satılıksa(1), Kiralıksa(2) ' ye basınız : ")
-    if ilantür == 1 or 2:
-        if ilantür == 1:
-            ""
-        else:
-            ""
-    else:
-        print("Hatalı giriş yaptınız !")
