@@ -13,6 +13,11 @@ while True:
     )
     if secim == "1":
         while True:
+            with open("ilan_kayitlari.txt", "r", encoding="utf-8") as dosyaD:
+                for satir in dosyaD:
+                    temiz_satir = satir.strip()
+                    parcalarlist = temiz_satir.split(",")
+
             ilanno = input("İlan numarasını giriniz : ")
             sehir = input("Şehir ismini giriniz : ")
             fiyat = int(input("Fiyatı giriniz : "))
@@ -24,6 +29,17 @@ while True:
                     mülk[ilanno] = [sehir, fiyat, ilantür]
                 cevap = devam_etmek_istiyor_mu("Veri eklemek istiyormusunuz ? ")
                 if not cevap:
+                    with open("ilan_kayitlari.txt", "a", encoding="utf-8") as dosya:
+                        for ilanno, bilgiler in mülk.items():
+                            sehirD = bilgiler[0]
+                            fiyatD = bilgiler[1]
+                            ilantürD = bilgiler[2]
+                            if ilantürD == "1":
+                                ilantürD = "SATILIK"
+                                dosya.write(f"{ilanno},{sehirD},{fiyatD},{ilantürD}")
+                            else:
+                                ilantürD = "KİRALIK"
+                                dosya.write(f"{ilanno},{sehirD},{fiyatD},{ilantürD}")
                     break
                 else:
                     continue
@@ -32,7 +48,9 @@ while True:
                 continue
 
     elif secim == "2":
-        pass
+        with open("ilan_kayitlari.txt", "r", encoding="utf-8") as dosya:
+            veri = dosya.readlines()
+
     elif secim == "3":
         pass
     elif secim == "4":
