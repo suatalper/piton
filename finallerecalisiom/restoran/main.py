@@ -1,3 +1,5 @@
+import sqlite3
+
 restoran = {}
 parcalalist = []
 toplamfiyatKS = 0
@@ -65,4 +67,31 @@ while True:
                 print("Bu Masaya indirim uygulanmıştır !")
 
     elif secim == "4":
-        pass
+        baglanti = sqlite3.connect("restoran.db")
+        imlec = baglanti.cursor()
+        imlec.execute("""
+        CREATE TABLE IF NOT EXISTS GunlukSatislar (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        garson_adi TEXT,
+        toplam_ciro INTEGER)
+                      """)
+        toplamciro = 0
+        garson_ciro = {}
+        for detaylist in restoran.values():
+            garsonadi = detaylist[0]
+            fiyat = detaylist[2]
+            if garsonadi in garson_ciro:
+                garson_ciro[garsonadi] += fiyat
+            else:
+                garson_ciro[garsonadi] += fiyat
+
+        for garson, toplamfiyat in garson_ciro.items():
+            imlec.execute(
+                "INSERT INTO GunlukSatislar (garson_adi, toplam_ciro) VALUES (?, ?)",
+                (garson, toplamfiyat),
+            )
+        baglanti.commit()
+        baglanti.close()
+
+        print("Veritabanı işlemi tamamlandı!")
+        break
