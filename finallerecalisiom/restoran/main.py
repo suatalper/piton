@@ -2,8 +2,6 @@ import sqlite3
 
 restoran = {}
 parcalalist = []
-toplamfiyatKS = 0
-sayacKS = 0
 
 
 def devam_etmek_istiyor_mu(sorumetni):
@@ -28,8 +26,8 @@ while True:
                         if len(parcalalist) >= 4:
                             restoran[parcalalist[0].upper()] = [
                                 parcalalist[1].upper(),
-                                parcalalist[2].upper(),
-                                parcalalist[3].upper(),
+                                parcalalist[2].upper().split(","),
+                                int(parcalalist[3]),
                             ]
                 if len(restoran) > 0:
                     print("Değerler başarıyla yüklendi !")
@@ -42,29 +40,42 @@ while True:
             break
 
     elif secim == "2":
+        toplamfiyatKS = 0
+        sayacKS = 0
         for detaylar in restoran.values():
-            if detaylar[1] == "SÜTLAÇ" and "KÜNEFE":
+            if "SÜTLAÇ" in detaylar[1] or "KÜNEFE" in detaylar[1]:
                 sayacKS += 1
                 bulunan_fiyat = int(detaylar[2])
                 toplamfiyatKS += bulunan_fiyat
-
-        ort = toplamfiyatKS / sayacKS
-        print(f"Künefe ve Sütlaç Yiyen Masaların fiyat ortalması {ort}")
+        if sayacKS > 0:
+            ort = toplamfiyatKS / sayacKS
+            print(f"Künefe ve Sütlaç Yiyen Masaların fiyat ortalması {ort}")
+        else:
+            print("Kampanyaya uyan maasa bulunmamaktadır !")
     elif secim == "3":
-        sesliharf = ["eıoüaiöu"]
-        sesliharf_say = 0
-        sessizharf_say = 0
-        for yemek_detaylari in restoran.values():
+        sesliharf = "EIOÜAİÖU"
+        for masa, yemek_detaylari in restoran.items():
+            indirim_yapildi_mi = False
             for yemekler in yemek_detaylari[1]:
+                if indirim_yapildi_mi:
+                    break
+                sesliharf_say = 0
+                sessizharf_say = 0
                 for harf in yemekler:
-                    if harf in sesliharf:
-                        sesliharf_say += 1
+                    if harf.isalpha():
+                        if harf in sesliharf:
+                            sesliharf_say += 1
+                        else:
+                            sessizharf_say += 1
                     else:
-                        sesliharf_say += 1
-            if sessizharf_say > sesliharf_say:
-                indirimlifiyat = yemek_detaylari[1] - yemek_detaylari * 0.15
-                restoran[yemek_detaylari[0]][2] = indirimlifiyat
-                print("Bu Masaya indirim uygulanmıştır !")
+                        continue
+                if sesliharf_say > sessizharf_say:
+                    indirimlifiyat = (
+                        float(yemek_detaylari[2]) - float(yemek_detaylari[2]) * 0.15
+                    )
+                    restoran[masa][2] = indirimlifiyat
+                    indirim_yapildi_mi = True
+                    print("Bu Masaya indirim uygulanmıştır !")
 
     elif secim == "4":
         baglanti = sqlite3.connect("restoran.db")
@@ -83,7 +94,7 @@ while True:
             if garsonadi in garson_ciro:
                 garson_ciro[garsonadi] += fiyat
             else:
-                garson_ciro[garsonadi] += fiyat
+                garson_ciro[garsonadi] = fiyat
 
         for garson, toplamfiyat in garson_ciro.items():
             imlec.execute(
