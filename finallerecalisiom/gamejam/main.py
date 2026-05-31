@@ -1,4 +1,5 @@
 import math
+import sqlite3
 
 jamkayitlari = {}
 
@@ -43,7 +44,18 @@ while True:
                         jamkayitlari[key] = (value[0], value[1], int(yeni_bütce))
 
     elif secim == "4":
-        pass
+        baglanti = sqlite3.connect("gamejam.db")
+        imlec = baglanti.cursor()
+        imlec.execute(
+            "CREATE TABLE IF NOT EXISTS FinalKayitlar (TakimAdi TEXT, UyeSayisi INTEGER,SonButce INTEGER )"
+        )
+        for takim_adi, detaylar in jamkayitlari.items():
+            (
+                imlec.execute("INSERT INTO FinalKayitlar VALUES (?,?,?) "),
+                (takim_adi, len(detaylar[0]), detaylar[2]),
+            )
+        baglanti.commit()
+        baglanti.close()
     else:
         print("Hatalı giriş yaptınız :")
         continue
